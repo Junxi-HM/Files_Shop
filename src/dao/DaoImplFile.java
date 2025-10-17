@@ -116,6 +116,10 @@ public class DaoImplFile implements Dao {
 
 				counterProduct++;
 			}
+			
+			// Append total number of products
+            String total = "Total number of products: " + inventory.size() + ";";
+            pw.println(total);
 
 			pw.close();
 			fw.close();

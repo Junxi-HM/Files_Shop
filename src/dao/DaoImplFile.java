@@ -140,4 +140,22 @@ public class DaoImplFile implements Dao {
 	public Employee getEmployee(int employeeId, String password) {
 		return null;
 	}
+
+	@Override
+	public boolean addProduct(Product product) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateProduct(Product product) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteProduct(int productId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

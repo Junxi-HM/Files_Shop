@@ -181,11 +181,19 @@ public class ProductView extends JDialog implements ActionListener{
 							JOptionPane.ERROR_MESSAGE);
 					
 				} else {					
+					// update stock
 					product.setStock(product.getStock() + Integer.parseInt(textFieldStock.getText()));
-					JOptionPane.showMessageDialog(null, "Stock actualizado ", "Information",
-							JOptionPane.INFORMATION_MESSAGE);
-					// release current screen
-					dispose();	
+					
+					// update product in database
+					if (shop.updateProduct(product)) {
+						JOptionPane.showMessageDialog(null, "Stock actualizado ", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
+						// release current screen
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al actualizar stock en base de datos", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				
 				break;
@@ -198,12 +206,19 @@ public class ProductView extends JDialog implements ActionListener{
 					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					
-				} else {					
-					shop.getInventory().remove(product);
-					JOptionPane.showMessageDialog(null, "Producto eliminado", "Information",
-							JOptionPane.INFORMATION_MESSAGE);
-					// release current screen
-					dispose();	
+				} else {
+					// delete product from database
+					if (shop.deleteProduct(product.getId())) {
+						// remove from local inventory
+						shop.getInventory().remove(product);
+						JOptionPane.showMessageDialog(null, "Producto eliminado", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
+						// release current screen
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al eliminar producto de base de datos", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				
 				break;

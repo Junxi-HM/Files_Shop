@@ -16,8 +16,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-import dao.DaoImplFile;
-
+import dao.DaoImplJDBC;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -27,14 +26,14 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplFile dao;
+	private DaoImplJDBC dao;
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
-		this.dao = new DaoImplFile();
+		this.dao = new DaoImplJDBC();
 	}
 	
 	
@@ -210,6 +209,7 @@ public class Shop {
 //		addProduct(new Product("Hamburguesa", new Amount(30.00), true, 30));
 //		addProduct(new Product("Fresa", new Amount(5.00), true, 20));
 		// now read from file
+		dao.connect();
 		this.readInventory();
 	}
 
@@ -266,9 +266,9 @@ public class Shop {
 
 		if (product != null) {
 			// remove it
+			deleteProduct(product.getId());
 			if (inventory.remove(product)) {
 				System.out.println("El producto " + name + " ha sido eliminado");
-
 			} else {
 				System.out.println("No se ha encontrado el producto con nombre " + name);
 			}
@@ -292,6 +292,7 @@ public class Shop {
 			int stock = scanner.nextInt();
 			// update stock product
 			product.setStock(product.getStock() + stock);
+			updateProduct(product);
 			System.out.println("El stock del producto " + name + " ha sido actualizado a " + product.getStock());
 
 		} else {
@@ -311,6 +312,7 @@ public class Shop {
 
 		if (product != null) {
 			product.expire();
+			updateProduct(product);
 			System.out.println("El precio del producto " + name + " ha sido actualizado a " + product.getPublicPrice());
 		}
 	}
@@ -483,16 +485,37 @@ public class Shop {
 	 * add a product to inventory
 	 * 
 	 * @param product
+	 * @return 
 	 */
-	public void addProduct(Product product) {
+	public boolean addProduct(Product product) {
 		if (isInventoryFull()) {
 			System.out.println("No se pueden añadir más productos, se ha alcanzado el máximo de " + inventory.size());
-			return;
+			return false;
 		}
 		inventory.add(product);
 		numberProducts++;
+		return dao.addProduct(product);
 	}
 	
+	/**
+	 * update a product in database
+	 * 
+	 * @param product
+	 * @return true if updated successfully
+	 */
+	public boolean updateProduct(Product product) {
+		return dao.updateProduct(product);
+	}
+	
+	/**
+	 * delete a product from database
+	 * 
+	 * @param productId
+	 * @return true if deleted successfully
+	 */
+	public boolean deleteProduct(int productId) {
+		return dao.deleteProduct(productId);
+	}
 	
 
 	/**

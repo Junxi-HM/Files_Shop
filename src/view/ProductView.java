@@ -160,7 +160,7 @@ public class ProductView extends JDialog implements ActionListener{
 					
 				} else {
 					product = new Product(textFieldName.getText(), 
-							new Amount(Double.parseDouble(textFieldPrice.getText())) ,
+							Double.parseDouble(textFieldPrice.getText()) ,
 							true,
 							Integer.parseInt(textFieldStock.getText()));
 					shop.addProduct(product);

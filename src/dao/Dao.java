@@ -13,7 +13,7 @@ public interface Dao {
 
 	public Employee getEmployee(int employeeId, String password);
 	
-	public ArrayList<Product> getInvertory();
+	public ArrayList<Product> getInventory();
 	
 	public boolean writeInventory(ArrayList<Product> inventory);
 	

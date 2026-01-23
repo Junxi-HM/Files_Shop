@@ -25,7 +25,7 @@ public class DaoImplFile implements Dao {
 	}
 
 	@Override
-	public ArrayList<Product> getInvertory() {
+	public ArrayList<Product> getInventory() {
 		// locate file, path and name
 		File f = new File(System.getProperty("user.dir") + File.separator + "files/inputInventory.txt");
 

@@ -16,7 +16,9 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-import dao.DaoImplJDBC;
+
+import dao.Dao;
+import dao.DaoImplHibernate;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -26,14 +28,14 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplJDBC dao;
+	private DaoImplHibernate dao;
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
-		this.dao = new DaoImplJDBC();
+		this.dao = new DaoImplHibernate();
 	}
 	
 	
@@ -217,7 +219,7 @@ public class Shop {
 	 * read inventory from file
 	 */
 	private void readInventory() {
-		this.inventory = dao.getInvertory();
+		this.inventory = dao.getInventory();
 	}
 
 	public boolean writeInventory() {
@@ -243,12 +245,12 @@ public class Shop {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Nombre: ");
 		String name = scanner.nextLine();
-		System.out.print("Precio mayorista: ");
-		double wholesalerPrice = scanner.nextDouble();
+		System.out.print("Precio: ");
+		double price = scanner.nextDouble();
 		System.out.print("Stock: ");
 		int stock = scanner.nextInt();
 
-		addProduct(new Product(name, new Amount(wholesalerPrice), true, stock));
+		addProduct(new Product(name, price, true, stock));
 	}
 
 	/**
@@ -313,7 +315,7 @@ public class Shop {
 		if (product != null) {
 			product.expire();
 			updateProduct(product);
-			System.out.println("El precio del producto " + name + " ha sido actualizado a " + product.getPublicPrice());
+			System.out.println("El precio del producto " + name + " ha sido actualizado a " + product.getPrice());
 		}
 	}
 
@@ -358,7 +360,7 @@ public class Shop {
 
 			if (product != null && product.isAvailable()) {
 				productAvailable = true;
-				totalAmount.setValue(totalAmount.getValue() + product.getPublicPrice().getValue());
+				totalAmount.setValue(totalAmount.getValue() + product.getPrice());
 				product.setStock(product.getStock() - 1);
 				shoppingCart.add(product);
 				numberShopping++;
@@ -444,7 +446,7 @@ public class Shop {
 				// build products line
 				StringBuilder productLine= new StringBuilder();
 				for (Product product : sale.getProducts()) {
-					productLine.append(product.getName()+ "," + product.getPublicPrice()+";");
+					productLine.append(product.getName()+ "," + product.getPrice()+";");
 				}
 				StringBuilder secondLine = new StringBuilder(counterSale+ ";" + "Products=" + productLine +";");						                                                
 				pw.write(secondLine.toString());	

@@ -66,7 +66,7 @@ public class DaoImplJDBC implements Dao {
 	}
 
 	@Override
-	public ArrayList<Product> getInvertory() {
+	public ArrayList<Product> getInventory() {
 		ArrayList<Product> inventory = new ArrayList<>();
 		String query = "SELECT * FROM inventory";
 		

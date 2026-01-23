@@ -1,9 +1,10 @@
 package model;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name = "inventory")
-public class Product {
+@Table(name = "historical_inventory")
+public class ProductHistory {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -20,35 +21,28 @@ public class Product {
     @Column
     private int stock;
     
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    
     public final static double EXPIRATION_RATE=0.60;
     
-    @Transient
-    private Amount publicPrice;
-    @Transient
-    private Amount wholesalerPrice;
-    @Transient
-    private static int totalProducts;
+//  private Amount publicPrice;
+//  private Amount wholesalerPrice;
+//  private static int totalProducts;
     
-    public Product() {
+    public ProductHistory() {
 
     }
-	public Product(String name, double price, boolean available, int stock) {
+	public ProductHistory(String name, double price, boolean available, int stock) {
 		super();
 		this.name = name;
 		this.price = price;
+//		this.wholesalerPrice = wholesalerPrice;
+//		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
 		this.available = available;
 		this.stock = stock;
-	}
-	
-	public Product(String name, Amount wholesalerPrice, boolean available, int stock) {
-		super();
-		this.id = totalProducts+1;
-		this.name = name;
-		this.wholesalerPrice = wholesalerPrice;
-		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
-		this.available = available;
-		this.stock = stock;
-		totalProducts++;
+		this.createdAt = new Date();
 	}
 
 	public int getId() {
@@ -74,24 +68,32 @@ public class Product {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
+	public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
 	
 
-	public Amount getPublicPrice() {
-		return publicPrice;
-	}
-
-	public void setPublicPrice(Amount publicPrice) {
-		this.publicPrice = publicPrice;
-	}
-
-	public Amount getWholesalerPrice() {
-		return wholesalerPrice;
-	}
-
-	public void setWholesalerPrice(Amount wholesalerPrice) {
-		this.wholesalerPrice = wholesalerPrice;
-	}
+//	public double getPublicPrice() {
+//		return publicPrice;
+//	}
+//
+//	public void setPublicPrice(double publicPrice) {
+//		this.publicPrice = publicPrice;
+//	}
+//
+//	public double getWholesalerPrice() {
+//		return wholesalerPrice;
+//	}
+//
+//	public void setWholesalerPrice(double wholesalerPrice) {
+//		this.wholesalerPrice = wholesalerPrice;
+//	}
 	
 	
 

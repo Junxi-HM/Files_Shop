@@ -8,7 +8,7 @@ public class Client extends Person implements Payable {
 	private Amount balance = BALANCE;
 	
 	public static final int MEMBER_ID = 456;
-	public static final Amount BALANCE = new Amount(50.00);
+	public static final Amount BALANCE = new Amount(50.00, "€");
 	
 	public Client(String name) {
 		super(name);

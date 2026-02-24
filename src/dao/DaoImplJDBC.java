@@ -81,7 +81,7 @@ public class DaoImplJDBC implements Dao {
 				int stock = rs.getInt("stock");
 				
 				// Product with a wholesale price
-				Product product = new Product(name, new Amount(wholesalerPrice), available, stock);
+				Product product = new Product(name, new Amount(wholesalerPrice, "€"), available, stock);
 				// Adjust the ID and public price from the database
 				product.setId(id);
 				

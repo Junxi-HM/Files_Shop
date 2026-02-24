@@ -73,7 +73,7 @@ public class DaoImplFile implements Dao {
 					}
 				}
 				// add product to inventory
-				this.inventory.add(new Product(name, new Amount(wholesalerPrice), true, stock));
+				this.inventory.add(new Product(name, new Amount(wholesalerPrice, "€"), true, stock));
 				// read next line
 				line = br.readLine();
 			}

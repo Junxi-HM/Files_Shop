@@ -8,10 +8,10 @@ public class Amount {
 	
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 	
-	public Amount(double value) {
-		super();
-		this.value = value;
-	}
+	public Amount(double value, String currency) {
+        this.value = value;
+        this.currency = currency;
+    }
 
 	public double getValue() {
 		return value;

@@ -27,7 +27,7 @@ public class Product {
     @Transient
     private Amount wholesalerPrice;
     @Transient
-    private static int totalProducts;
+    public static int totalProducts = 0;
     
     public Product() {
 
@@ -45,7 +45,7 @@ public class Product {
 		this.id = totalProducts+1;
 		this.name = name;
 		this.wholesalerPrice = wholesalerPrice;
-		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
+		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2, "€");
 		this.available = available;
 		this.stock = stock;
 		totalProducts++;

@@ -18,24 +18,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.Dao;
-import dao.DaoImplHibernate;
+import dao.DaoImplMongoDB;
 
 public class Shop {
-	private Amount cash = new Amount(100.00);
+	private Amount cash = new Amount(100.00,"€");
 //	private Product[] inventory;
 	private ArrayList<Product> inventory;
 	private int numberProducts;
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplHibernate dao;
+	private DaoImplMongoDB dao;
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
-		this.dao = new DaoImplHibernate();
+		this.dao = new DaoImplMongoDB();
 	}
 	
 	
@@ -346,7 +346,7 @@ public class Shop {
 		ArrayList<Product> shoppingCart = new ArrayList<Product>();
 		int numberShopping = 0;
 
-		Amount totalAmount = new Amount(0.0);
+		Amount totalAmount = new Amount(0.0, "€");
 		String name = "";
 		while (!name.equals("0")) {
 			System.out.println("Introduce el nombre del producto, escribir 0 para terminar:");
@@ -473,7 +473,7 @@ public class Shop {
 	 * show total amount all sales
 	 */
 	private void showSalesAmount() {
-		Amount totalAmount = new Amount(0.0);
+		Amount totalAmount = new Amount(0.0, "€");
 		for (Sale sale : sales) {
 			if (sale != null) {
 				totalAmount.setValue(totalAmount.getValue() + sale.getAmount().getValue());

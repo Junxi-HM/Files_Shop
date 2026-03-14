@@ -4,8 +4,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.combine;
-import static com.mongodb.client.model.Updates.set;
+
 
 import java.util.ArrayList;
 
@@ -34,27 +33,13 @@ public class DaoImplMongoDB implements Dao{
 
 	@Override
 	public void connect() {
-		String uri = "mongodb://localhost:27017";
-		MongoClientURI mongoClientURI = new MongoClientURI(uri);
-		this.mongoClient = new MongoClient(mongoClientURI);
-		this.database = mongoClient.getDatabase("Shop");
-		this.employeeCollection = database.getCollection("Users");
+	    String uri = "mongodb://localhost:27017";
+	    MongoClientURI mongoClientURI = new MongoClientURI(uri);
+	    this.mongoClient = new MongoClient(mongoClientURI);
+	    this.database = mongoClient.getDatabase("Shop");
+	    this.employeeCollection = database.getCollection("Users");
 	    this.inventoryCollection = database.getCollection("Inventory");
-	    this.historicalCollection = database.getCollection("Historical_Inventory");	    
-	    MongoCollection<Document> countersCollection = database.getCollection("Counters");	  
-	    Document maxIdDoc = inventoryCollection.find()
-	            .sort(new Document("id", -1))
-	            .first();
-	    int maxId = (maxIdDoc != null && maxIdDoc.getInteger("id") != null) 
-	                ? maxIdDoc.getInteger("id") : 0;
-	    Document existingCounter = countersCollection.find(new Document("_id", "inventory")).first();
-	    if (existingCounter == null || existingCounter.getInteger("seq") < maxId) {
-	        countersCollection.findOneAndUpdate(
-	            new Document("_id", "inventory"),
-	            new Document("$set", new Document("seq", maxId)),
-	            new com.mongodb.client.model.FindOneAndUpdateOptions().upsert(true)
-	        );
-	    }
+	    this.historicalCollection = database.getCollection("Historical_Inventory");
 	}
 
 	@Override
@@ -104,16 +89,11 @@ public class DaoImplMongoDB implements Dao{
 	@Override
 	public boolean addProduct(Product product) {
 	    try {
-	        MongoCollection<Document> countersCollection = database.getCollection("Counters");
-	        Document counter = countersCollection.findOneAndUpdate(
-	            new Document("_id", "inventory"),
-	            new Document("$inc", new Document("seq", 1)),
-	            new com.mongodb.client.model.FindOneAndUpdateOptions()
-	                .returnDocument(com.mongodb.client.model.ReturnDocument.AFTER)
-	                .upsert(true)
-	        );
-
-	        int nextId = counter.getInteger("seq");
+	        Document maxIdDoc = inventoryCollection.find()
+	                .sort(new Document("id", -1))
+	                .first();
+	        int nextId = (maxIdDoc != null && maxIdDoc.getInteger("id") != null)
+	                     ? maxIdDoc.getInteger("id") + 1 : 1;
 
 	        double priceValue = (product.getWholesalerPrice() != null)
 	                            ? product.getWholesalerPrice().getValue()
